@@ -76,11 +76,9 @@ public class DummyServerService {
   }
 
   private ResponseSelectorsInfo loadSelectorDto(RequestDto request) {
-    String selectorPath =
-        StringUtils.endsWith(request.getServletPath(), "/") ? request.getServletPath()
-            : StringUtils.join(request.getServletPath(), "/");
     Resource resource = resourceLoader
-        .getResource(StringUtils.join(RESOURCE_PATH, selectorPath, RESPONSE_SETTING_FILE));
+        .getResource(DummyServerUtils
+            .toFilePath(RESOURCE_PATH, request.getServletPath(), RESPONSE_SETTING_FILE));
     if (!resource.exists()) {
       throw new SystemException("file not found.");
     }
@@ -309,10 +307,9 @@ public class DummyServerService {
 
   private ResponseEntity<byte[]> createFileResponse(ResponseInfoDto responseInfo,
       String servletPath) {
-    String fileName = responseInfo.getResponseFile();
-    fileName = StringUtils.startsWith(fileName, "/") ? fileName : StringUtils.join("/", fileName);
     Resource resource = resourceLoader
-        .getResource(StringUtils.join(RESOURCE_PATH, servletPath, fileName));
+        .getResource(DummyServerUtils
+            .toFilePath(RESOURCE_PATH, servletPath, responseInfo.getResponseFile()));
     try (InputStream input = new FileInputStream(resource.getFile())) {
       HttpHeaders httpHeaders = toHttpHeaders(responseInfo.getHttpHeaders());
       changeContentDisposition(httpHeaders, responseInfo.getResponseFile(),

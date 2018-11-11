@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -20,14 +19,16 @@ import java.util.stream.Collectors;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.boot.autoconfigure.http.HttpProperties.Encoding;
 
 public class DummyServerUtils {
 
-  private static final Pattern MULTIPART_PATTERN = Pattern.compile("^multipart/(form-data|mixed stream)", Pattern.CASE_INSENSITIVE);
-  private static final Pattern JSON_PATTERN = Pattern.compile("^application/json", Pattern.CASE_INSENSITIVE);
+  private static final Pattern MULTIPART_PATTERN = Pattern
+      .compile("^multipart/(form-data|mixed stream)", Pattern.CASE_INSENSITIVE);
+  private static final Pattern JSON_PATTERN = Pattern
+      .compile("^application/json", Pattern.CASE_INSENSITIVE);
   private static final Pattern TEXT_PATTERN = Pattern.compile("^text/", Pattern.CASE_INSENSITIVE);
-  private static final Pattern FIND_CHARSET_PATTERN = Pattern.compile("^.*charset=(.+?)(;.*$|$)", Pattern.CASE_INSENSITIVE);
+  private static final Pattern FIND_CHARSET_PATTERN = Pattern
+      .compile("^.*charset=(.+?)(;.*$|$)", Pattern.CASE_INSENSITIVE);
   private static final ObjectMapper MAPPER = new ObjectMapper();
 
 
@@ -36,22 +37,31 @@ public class DummyServerUtils {
     return count > 0 && count != objects.length;
   }
 
-  public static boolean equalsOrExcludedString(String target, String expect) {
-    if (Objects.isNull(expect)) {
-      return true;
+  public static String toFilePath(String... str) {
+    if (Objects.isNull(str) || str.length == 0) {
+      return null;
     }
-    return StringUtils.equals(target, expect);
+    if (str.length == 1) {
+      return str[0];
+    }
+    StringBuilder sb = new StringBuilder();
+    sb.append(StringUtils.removeEnd(str[0], "/")).append("/");
+    for (int i = 1; i < str.length - 1; i++) {
+      sb.append(StringUtils.removeStart(StringUtils.removeEnd(str[i], "/"), "/")).append("/");
+    }
+    sb.append(StringUtils.removeStart(str[str.length - 1], "/"));
+    return sb.toString();
   }
 
   public static <T> List<T> toList(T[] src) {
     return Objects.nonNull(src) ? Arrays.asList(src) : new ArrayList<>();
   }
 
-  public static <K,V> Map<K, V> toMap(Enumeration<K> keys, Function<K, V> valueFunction) {
+  public static <K, V> Map<K, V> toMap(Enumeration<K> keys, Function<K, V> valueFunction) {
     return toMap(Collections.list(keys), valueFunction);
   }
 
-  public static <K,V> Map<K, V> toMap(List<K> keys, Function<K, V> valueFunction) {
+  public static <K, V> Map<K, V> toMap(List<K> keys, Function<K, V> valueFunction) {
     if (Objects.isNull(keys) || Objects.isNull(valueFunction)) {
       return new ConcurrentHashMap<>();
     }
@@ -70,7 +80,7 @@ public class DummyServerUtils {
     return Objects.nonNull(contentType) && TEXT_PATTERN.matcher(contentType).find();
   }
 
-    public static Charset getCharset(String contentType) {
+  public static Charset getCharset(String contentType) {
     Charset charset = null;
     if (Objects.nonNull(contentType)) {
       charset = Charsets.toCharset(FIND_CHARSET_PATTERN.matcher(contentType).replaceAll("$1"));
