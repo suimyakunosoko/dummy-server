@@ -1,0 +1,75 @@
+responses:
+  # HttpRequest.authType
+  - authType:
+    - type: EQUAL
+      expect: sample
+    # HttpRequest.cookies
+    cookies:
+      # type (EQUAL|NOT_EQUAL|CONTAIN|NOT_CONTAIN)
+      - type: EQUAL
+        expect:
+          - name: name
+            value: value
+    headers:
+    # type (EQUAL|NOT_EQUAL|CONTAIN|NOT_CONTAIN)
+    - type: EQUAL
+      expect:
+        Content-Type:
+          - application/Json
+
+    method:
+      # type (EQUAL|NOT_EQUAL|CONTAIN|NOT_CONTAIN)
+    - type: EQUAL
+      expect: GET
+
+    contentType:
+    # type (EQUAL|NOT_EQUAL|CONTAIN|NOT_CONTAIN)
+    - type: EQUAL
+      expect: application/json;charset=UTF-8
+
+    charset:
+    # type (EQUAL|NOT_EQUAL|CONTAIN|NOT_CONTAIN)
+    - type: EQUAL
+      expect: UTF-8
+
+    queryStrings:
+    # type (EQUAL|NOT_EQUAL|CONTAIN|NOT_CONTAIN)
+    - type: EQUAL
+      expect:
+        - key=value
+
+    parts:
+    # type (EQUAL|NOT_EQUAL|CONTAIN|NOT_CONTAIN)
+    - type: EQUAL
+      expect:
+        - name: name
+          submittedFileName: submittedFileName
+          contentType: contentType
+          body: body
+
+    json:
+    # type (EQUAL|NOT_EQUAL|CONTAIN|NOT_CONTAIN)
+    - type: EQUAL
+      expect:
+          jsonKey: jsonValue
+
+    text:
+    # type (EQUAL|NOT_EQUAL|CONTAIN|NOT_CONTAIN)
+    - type: EQUAL
+      expect: expect
+
+    responseInfo:
+      # org.springframework.http.HttpStatus
+      status: OK
+      httpHeaders:
+        sample:
+          - sample
+      # type(TEXT|JSON|FILE)
+      type: JSON
+      responseText: text
+      responseJson:
+        key: value
+      # responseFile
+      responseFile: sample.txt
+      # responseFileName(URL_ENCODING)
+      responseFileName: sample.txt

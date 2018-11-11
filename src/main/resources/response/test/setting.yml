@@ -1,0 +1,46 @@
+responses:
+  - queryStrings:
+    # type (EQUAL|NOT_EQUAL|CONTAIN|NOT_CONTAIN)
+    - type: EQUAL
+      expect:
+      - query=json
+    responseInfo:
+      # org.springframework.http.HttpStatus
+      status: OK
+      httpHeaders:
+        sample:
+          - sample
+      type: JSON
+      responseJson:
+        key: value
+        key2: value2
+
+  - queryStrings:
+    # type (EQUAL|NOT_EQUAL|CONTAIN|NOT_CONTAIN)
+    - type: EQUAL
+      expect:
+      - query=text
+    responseInfo:
+      # org.springframework.http.HttpStatus
+      status: OK
+      httpHeaders:
+        sample:
+        - sample
+      type: TEXT
+      responseText: sampleText
+
+
+  - queryStrings:
+    # type (EQUAL|NOT_EQUAL|CONTAIN|NOT_CONTAIN)
+    - type: EQUAL
+      expect:
+      - query=file
+    responseInfo:
+      # org.springframework.http.HttpStatus
+      status: OK
+      httpHeaders:
+        sample:
+          - sample
+      type: FILE
+      responseFile: 新規 OpenDocument 表計算.ods
+      responseFileName: ダウンロードファイル.ods
