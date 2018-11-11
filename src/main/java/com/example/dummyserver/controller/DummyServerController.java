@@ -30,7 +30,7 @@ public class DummyServerController {
   @Autowired
   private DummyServerService service;
 
-  @RequestMapping("/*")
+  @RequestMapping("/**")
   public ResponseEntity<?> dummyServerMain(HttpServletRequest request) {
     RequestDto requestDto = new RequestDto(request);
     requestDto.showInfo();
